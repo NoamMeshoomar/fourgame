@@ -1,20 +1,26 @@
 <template>
     <div class="grid-container">
-        <div class="grid">
+        <div class="grid" v-if="!loading">
             <div v-for="(row, index) in grid" :key="index" class="row">
                 <div v-for="(cell, index) in row" :key="index" class="cell" @click="$emit('turn', index)">
                     <span v-if="cell" :class="[cell && cell == 1 ? 'player' : 'bot']"></span>
                 </div>
             </div>
         </div>
+        <Loading v-if="loading" />
         <div class="board-bottom"></div>
     </div>
 </template>
 
 <script>
+import Loading from "./Loading.vue";
+
 export default {
     name: 'Grid',
-    props: ["grid"]
+    components: {
+        Loading
+    },
+    props: ["grid", "loading"]
 }
 </script>
 
@@ -55,6 +61,7 @@ export default {
     width: 100%;
     height: auto;
     border-radius: 50%;
+    animation: fall 1s ease;
 }
 
 .grid .row .cell .player {
@@ -69,5 +76,15 @@ export default {
     background-color: rgb(22, 60, 165);
     width: 900px;
     height: 50px;
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(-1000px);
+    }
+
+    to {
+        transform: translateY(0);
+    }
 }
 </style>

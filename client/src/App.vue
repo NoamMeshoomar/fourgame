@@ -3,7 +3,7 @@
         <p class="bottom-message">{{started && !myTurn ? "WAIT FOR YOUR TURN!" : ""}}</p>
         <Menu v-if="!started" @start="start" />
         <Popup v-if="betweenRounds" :winnerPopup="winner" :color="winner" :message="message" @reset="reset" />
-        <Grid v-if="started" :grid="grid" @turn="turn" />
+        <Grid v-if="started" :grid="grid" :loading="loading" @turn="turn" />
     </div>
 </template>
 
@@ -27,13 +27,15 @@ export default {
             betweenRounds: false,
             grid: [],
             winner: null,
-            myTurn: true
+            myTurn: true,
+            loading: false
         }
     },
     methods: {
         start() {
             socket.emit("CREATE_GAME");
             this.started = true;
+            this.loading = true;
         },
         turn(rowPos) {
             if(!this.myTurn)
@@ -50,6 +52,7 @@ export default {
     mounted() {
         socket.on("GAME_CREATED", (grid) => {
             this.grid = grid;
+            this.loading = false;
         });
 
         socket.on("TURN", (pos, color) => {
@@ -59,7 +62,7 @@ export default {
                 setTimeout(() => {
                     this.grid[col][row] = color;
                     this.myTurn = true;
-                }, 1000);
+                }, 1500);
             } else {
                 this.grid[col][row] = color;
             }
