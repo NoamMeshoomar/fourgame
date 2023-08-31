@@ -1,25 +1,25 @@
 <template>
     <div class="app">
         <p class="bottom-message">{{started && !myTurn ? "WAIT FOR YOUR TURN!" : ""}}</p>
-        <Menu v-if="!started" @start="start" />
-        <Popup v-if="betweenRounds" :winnerPopup="winner" :color="winner" :message="message" @reset="reset" />
-        <Grid v-if="started" :grid="grid" :loading="loading" @turn="turn" />
+        <MenuComponent v-if="!started" @start="start" />
+        <PopupComponent v-if="betweenRounds" :winnerPopup="winner" :color="winner" :message="message" @reset="reset" />
+        <GridComponent v-if="started" :grid="grid" :loading="loading" @turn="turn" />
     </div>
 </template>
 
 <script>
-import Menu from "./components/Menu.vue";
-import Popup from "./components/Popup.vue"
-import Grid from "./components/Grid.vue";
+import MenuComponent from "./components/MenuComponent.vue";
+import PopupComponent from "./components/PopupComponent.vue"
+import GridComponent from "./components/GridComponent.vue";
 
 import socket from "./utils/socketIOConnection";
 
 export default {
     name: 'App',
     components: {
-        Menu,
-        Popup,
-        Grid
+        MenuComponent,
+        PopupComponent,
+        GridComponent
     },
     data() {
         return {
